@@ -1,119 +1,118 @@
 part of 'rx_crud_subject.dart';
 
-extension RxEventExtension<Created, Read, Updated, Deleted>
-    on RxEvent<Created, Read, Updated, Deleted> {
+extension RxCrudEventExtension<Created, Read, Updated, Deleted>
+    on RxCrudEvent<Created, Read, Updated, Deleted> {
   WhenValue when<WhenValue>({
     required WhenValue Function(
-      RxStandaloneEvent<Created, Read, Updated, Deleted> event,
+      RxCrudStandaloneEvent<Created, Read, Updated, Deleted> event,
     )
     onStandalone,
     required WhenValue Function(
-      RxBatchEvent<Created, Read, Updated, Deleted> event,
+      RxCrudBatchEvent<Created, Read, Updated, Deleted> event,
     )
     onBatch,
   }) {
     return switch (this) {
-      final RxStandaloneEvent<Created, Read, Updated, Deleted> event =>
+      final RxCrudStandaloneEvent<Created, Read, Updated, Deleted> event =>
         onStandalone(event),
-      final RxBatchEvent<Created, Read, Updated, Deleted> event => onBatch(
+      final RxCrudBatchEvent<Created, Read, Updated, Deleted> event => onBatch(
         event,
       ),
     };
   }
 }
 
-sealed class RxEvent<Created, Read, Updated, Deleted> with EquatableMixin {
-  const RxEvent();
+sealed class RxCrudEvent<Created, Read, Updated, Deleted> with EquatableMixin {
+  const RxCrudEvent();
 }
 
-sealed class RxStandaloneEvent<Created, Read, Updated, Deleted>
-    extends RxEvent<Created, Read, Updated, Deleted> {
-  const RxStandaloneEvent();
+sealed class RxCrudStandaloneEvent<Created, Read, Updated, Deleted>
+    extends RxCrudEvent<Created, Read, Updated, Deleted> {
+  const RxCrudStandaloneEvent();
 
   WhenValue when<WhenValue>({
     required WhenValue Function(
-      RxCreateEvent<Created, Read, Updated, Deleted> event,
-    )
-    onCreate,
-    required WhenValue Function(
-      RxReadEvent<Created, Read, Updated, Deleted> event,
-    )
-    onRead,
-    required WhenValue Function(
-      RxUpdateEvent<Created, Read, Updated, Deleted> event,
-    )
-    onUpdate,
-    required WhenValue Function(
-      RxDeleteEvent<Created, Read, Updated, Deleted> event,
-    )
-    onDelete,
-  }) {
-    return switch (this) {
-      final RxCreateEvent<Created, Read, Updated, Deleted> event => onCreate(
-        event,
-      ),
-      final RxReadEvent<Created, Read, Updated, Deleted> event => onRead(event),
-      final RxUpdateEvent<Created, Read, Updated, Deleted> event => onUpdate(
-        event,
-      ),
-      final RxDeleteEvent<Created, Read, Updated, Deleted> event => onDelete(
-        event,
-      ),
-    };
-  }
-}
-
-sealed class RxBatchEvent<Created, Read, Updated, Deleted>
-    extends RxEvent<Created, Read, Updated, Deleted> {
-  const RxBatchEvent();
-
-  WhenValue when<WhenValue>({
-    required WhenValue Function(
-      RxBatchCreated<Created, Read, Updated, Deleted> event,
+      RxCrudCreated<Created, Read, Updated, Deleted> event,
     )
     onCreated,
     required WhenValue Function(
-      RxBatchRead<Created, Read, Updated, Deleted> event,
+      RxCrudRead<Created, Read, Updated, Deleted> event,
     )
     onRead,
     required WhenValue Function(
-      RxBatchUpdated<Created, Read, Updated, Deleted> event,
+      RxCrudUpdated<Created, Read, Updated, Deleted> event,
     )
     onUpdated,
     required WhenValue Function(
-      RxBatchDeleted<Created, Read, Updated, Deleted> event,
+      RxCrudDeleted<Created, Read, Updated, Deleted> event,
     )
     onDeleted,
   }) {
     return switch (this) {
-      final RxBatchCreated<Created, Read, Updated, Deleted> event => onCreated(
+      final RxCrudCreated<Created, Read, Updated, Deleted> event => onCreated(
         event,
       ),
-      final RxBatchRead<Created, Read, Updated, Deleted> event => onRead(event),
-      final RxBatchUpdated<Created, Read, Updated, Deleted> event => onUpdated(
+      final RxCrudRead<Created, Read, Updated, Deleted> event => onRead(event),
+      final RxCrudUpdated<Created, Read, Updated, Deleted> event => onUpdated(
         event,
       ),
-      final RxBatchDeleted<Created, Read, Updated, Deleted> event => onDeleted(
+      final RxCrudDeleted<Created, Read, Updated, Deleted> event => onDeleted(
         event,
       ),
+    };
+  }
+}
+
+sealed class RxCrudBatchEvent<Created, Read, Updated, Deleted>
+    extends RxCrudEvent<Created, Read, Updated, Deleted> {
+  const RxCrudBatchEvent();
+
+  WhenValue when<WhenValue>({
+    required WhenValue Function(
+      RxCrudBatchCreated<Created, Read, Updated, Deleted> event,
+    )
+    onCreated,
+    required WhenValue Function(
+      RxCrudBatchRead<Created, Read, Updated, Deleted> event,
+    )
+    onRead,
+    required WhenValue Function(
+      RxCrudBatchUpdated<Created, Read, Updated, Deleted> event,
+    )
+    onUpdated,
+    required WhenValue Function(
+      RxCrudBatchDeleted<Created, Read, Updated, Deleted> event,
+    )
+    onDeleted,
+  }) {
+    return switch (this) {
+      final RxCrudBatchCreated<Created, Read, Updated, Deleted> event =>
+        onCreated(event),
+      final RxCrudBatchRead<Created, Read, Updated, Deleted> event => onRead(
+        event,
+      ),
+      final RxCrudBatchUpdated<Created, Read, Updated, Deleted> event =>
+        onUpdated(event),
+      final RxCrudBatchDeleted<Created, Read, Updated, Deleted> event =>
+        onDeleted(event),
     };
   }
 }
 
 /// Standalone events
 
-final class RxCreateEvent<Created, Read, Updated, Deleted>
-    extends RxStandaloneEvent<Created, Read, Updated, Deleted> {
-  const RxCreateEvent({required this.value});
+final class RxCrudCreated<Created, Read, Updated, Deleted>
+    extends RxCrudStandaloneEvent<Created, Read, Updated, Deleted> {
+  const RxCrudCreated({required this.value});
   final Created value;
 
   @override
   List<Object?> get props => [value];
 }
 
-final class RxReadEvent<Created, Read, Updated, Deleted>
-    extends RxStandaloneEvent<Created, Read, Updated, Deleted> {
-  const RxReadEvent({required this.value});
+final class RxCrudRead<Created, Read, Updated, Deleted>
+    extends RxCrudStandaloneEvent<Created, Read, Updated, Deleted> {
+  const RxCrudRead({required this.value});
 
   final Read value;
 
@@ -121,18 +120,18 @@ final class RxReadEvent<Created, Read, Updated, Deleted>
   List<Object?> get props => [value];
 }
 
-final class RxUpdateEvent<Created, Read, Updated, Deleted>
-    extends RxStandaloneEvent<Created, Read, Updated, Deleted> {
-  const RxUpdateEvent({required this.value});
+final class RxCrudUpdated<Created, Read, Updated, Deleted>
+    extends RxCrudStandaloneEvent<Created, Read, Updated, Deleted> {
+  const RxCrudUpdated({required this.value});
   final Updated value;
 
   @override
   List<Object?> get props => [value];
 }
 
-final class RxDeleteEvent<Created, Read, Updated, Deleted>
-    extends RxStandaloneEvent<Created, Read, Updated, Deleted> {
-  const RxDeleteEvent({required this.value});
+final class RxCrudDeleted<Created, Read, Updated, Deleted>
+    extends RxCrudStandaloneEvent<Created, Read, Updated, Deleted> {
+  const RxCrudDeleted({required this.value});
 
   final Deleted value;
 
@@ -142,27 +141,27 @@ final class RxDeleteEvent<Created, Read, Updated, Deleted>
 
 /// Batch events
 
-final class RxBatchCreated<Created, Read, Updated, Deleted>
-    extends RxBatchEvent<Created, Read, Updated, Deleted> {
-  const RxBatchCreated({required this.batch});
+final class RxCrudBatchCreated<Created, Read, Updated, Deleted>
+    extends RxCrudBatchEvent<Created, Read, Updated, Deleted> {
+  const RxCrudBatchCreated({required this.batch});
   final Iterable<Created> batch;
 
   @override
   List<Object?> get props => [IterableEquality().hash(batch)];
 }
 
-final class RxBatchRead<Created, Read, Updated, Deleted>
-    extends RxBatchEvent<Created, Read, Updated, Deleted> {
-  const RxBatchRead({required this.batch});
+final class RxCrudBatchRead<Created, Read, Updated, Deleted>
+    extends RxCrudBatchEvent<Created, Read, Updated, Deleted> {
+  const RxCrudBatchRead({required this.batch});
   final Iterable<Read> batch;
 
   @override
   List<Object?> get props => [IterableEquality().hash(batch)];
 }
 
-final class RxBatchUpdated<Created, Read, Updated, Deleted>
-    extends RxBatchEvent<Created, Read, Updated, Deleted> {
-  const RxBatchUpdated({required this.batch});
+final class RxCrudBatchUpdated<Created, Read, Updated, Deleted>
+    extends RxCrudBatchEvent<Created, Read, Updated, Deleted> {
+  const RxCrudBatchUpdated({required this.batch});
 
   final Iterable<Updated> batch;
 
@@ -170,17 +169,11 @@ final class RxBatchUpdated<Created, Read, Updated, Deleted>
   List<Object?> get props => [IterableEquality().hash(batch)];
 }
 
-final class RxBatchDeleted<Created, Read, Updated, Deleted>
-    extends RxBatchEvent<Created, Read, Updated, Deleted> {
-  const RxBatchDeleted({required this.batch});
+final class RxCrudBatchDeleted<Created, Read, Updated, Deleted>
+    extends RxCrudBatchEvent<Created, Read, Updated, Deleted> {
+  const RxCrudBatchDeleted({required this.batch});
   final Iterable<Deleted> batch;
 
   @override
   List<Object?> get props => [IterableEquality().hash(batch)];
 }
-
-typedef RxListConverter<Item, Res> = Iterable<Item> Function(Res response);
-
-typedef RxDefaultEvent<State> = RxEvent<State, State, State, int>;
-
-typedef RxDefaultCrudSubject<State> = RxCrudSubject<State, State, State, int>;
